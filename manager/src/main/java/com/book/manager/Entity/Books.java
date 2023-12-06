@@ -1,4 +1,4 @@
-package entity;
+package com.book.manager.Entity;
 
 import java.sql.Date;
 
@@ -14,10 +14,10 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "book")
-public class Book {
+public class Books {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     private String writer;
 

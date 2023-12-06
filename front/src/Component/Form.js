@@ -3,22 +3,20 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios';
 
 function Form() {
+    const { id } = useParams();
     const [data, setData] = useState({
+        id: id,
         name: "",
-        email: "",
-        phone: "",
-        message: ""
+        writer: "",
+        date: (new Date())
     });
 
-    const { id } = useParams();
-
     useEffect(() => {
-        fetch(`http://localhost:4000/edit/${id}`).then(response => response.json()).then((json) => {
+        fetch(`http://localhost:8080/get/${id}`).then(response => response.json()).then((json) => {
             setData({
-                name: json[0].name,
-                email: json[0].email,
-                phone: json[0].phone,
-                message: json[0].message
+                id: json.id,
+                name: json.name,
+                writer: json.writer,
             });
         })
     }, [id])
@@ -31,7 +29,7 @@ function Form() {
 
     const sendData = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:4000/update/${id}`, data).then((res) => {
+        axios.post(`http://localhost:8080/update`, { id: data.id, name: data.name, writer: data.writer, date: (new Date()) }).then((res) => {
             alert("Updated Successfully");
         })
     }
@@ -39,13 +37,10 @@ function Form() {
     return (
         <div className='container my-5'>
             <form onSubmit={sendData} >
-                <input type="text" onChange={valueChanges} name="name" placeholder='Name' value={data.name} required className='form-control mb-2' />
-                <input type="email" onChange={valueChanges} name="email" placeholder='Email' value={data.email} required className='form-control mb-2' />
-                <input type="tel" onChange={valueChanges} name="phone" placeholder='Phone' value={data.phone} required className='form-control mb-2' />
-                <textarea onChange={valueChanges} name="message" placeholder='Message' required value={data.message} className='form-control mb-2' >{data.message}</textarea>
-
+                <input type="text" name="name" onChange={valueChanges} value={data.name} placeholder='Book Name' required className='form-control mb-2' />
+                <input type="text" name="writer" onChange={valueChanges} value={data.writer} placeholder='Writer' required className='form-control mb-2' />
                 <div className="col-md-2">
-                    <input type="submit" className='mt-1 w-100 btn btn-primary' value="Update" />
+                    <input type="submit" className='mt-1 w-100 btn btn-primary' value="Add Data" />
                 </div>
             </form>
         </div >

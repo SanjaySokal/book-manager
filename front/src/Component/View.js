@@ -2,24 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 function View() {
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        message: ""
-    });
-
     const { id } = useParams();
 
-    console.log(data);
+    const [data, setData] = useState({
+        id: id,
+        name: "",
+        writer: "",
+        date: ""
+    });
 
     useEffect(() => {
-        fetch(`http://localhost:4000/edit/${id}`).then(response => response.json()).then((json) => {
+        fetch(`http://localhost:8080/get/${id}`).then(response => response.json()).then((json) => {
             setData({
-                name: json[0].name,
-                email: json[0].email,
-                phone: json[0].phone,
-                message: json[0].message
+                id: json.id,
+                name: json.name,
+                writer: json.writer,
+                date: json.date
             });
         })
     }, [id])
@@ -40,16 +38,12 @@ function View() {
                         <td>{data.name}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Email</th>
-                        <td>{data.email}</td>
+                        <th scope="row">Writer</th>
+                        <td>{data.writer}</td>
                     </tr>
                     <tr>
-                        <th scope="row">Phone</th>
-                        <td colSpan="2">{data.phone}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Message</th>
-                        <td colSpan="2">{data.message}</td>
+                        <th scope="row">Date</th>
+                        <td colSpan="2">{data.date}</td>
                     </tr>
                 </tbody>
             </table>
